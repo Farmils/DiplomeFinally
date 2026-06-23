@@ -298,7 +298,7 @@ export default function NFTCard({ tokenId, onClick, isListed, price }) {
                             fontWeight: '700',
                             color: '#16a34a'
                         }}>
-                            {Number(formatEther(listing.price)).toFixed(4)} ETH
+                            {Number(formatEther(listing.price)).toFixed(4)} Tokens
                         </span>
                     </div>
                 ) : (

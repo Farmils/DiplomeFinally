@@ -5,6 +5,16 @@ export default function ElectronBanner() {
 
     if (!isElectron) return null
 
+    const openInBrowser = () => {
+        const url = 'https://farmils.github.io/DiplomeFinally/'
+
+        if (window.electronAPI?.openExternal) {
+            window.electronAPI.openExternal(url)
+        } else {
+            window.open(url, '_blank')
+        }
+    }
+
     return (
         <Alert
             variant="info"
@@ -18,12 +28,12 @@ export default function ElectronBanner() {
             <div>
                 <strong>🖥️ Desktop версия</strong>
                 <br />
-                <small>Для подключения MetaMask откройте приложение в браузере</small>
+                <small>Откройте в браузере для подключения MetaMask</small>
             </div>
             <Button
                 variant="primary"
                 size="sm"
-                onClick={() => window.open('http://localhost:5173', '_blank')}
+                onClick={openInBrowser}
                 style={{ borderRadius: '10px' }}
             >
                 🌐 Открыть в браузере
