@@ -127,49 +127,6 @@ const Header = () => {
                 Sepolia
                   <WalletConnect/>
               </Badge>
-
-              {isConnected ? (
-                  <div className="d-flex align-items-center gap-2">
-                    <div style={{
-                      background: '#f0fdf4',
-                      padding: '8px 14px',
-                      borderRadius: '10px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px'
-                    }}>
-                      <div style={{
-                        width: '10px',
-                        height: '10px',
-                        background: '#22c55e',
-                        borderRadius: '50%',
-                        animation: 'pulse 2s infinite'
-                      }} />
-                      <span style={{
-                        fontSize: '14px',
-                        fontWeight: '600',
-                        color: '#166534',
-                        fontFamily: 'monospace'
-                      }}>
-                                        {formatAddress(address)}
-                                    </span>
-                    </div>
-                    <Button
-                        variant="outline-danger"
-                        size="sm"
-                        onClick={handleDisconnect}
-                        style={{
-                          borderRadius: '10px',
-                          fontWeight: '500',
-                          padding: '8px 14px'
-                        }}
-                    >
-                      Отключить
-                    </Button>
-                  </div>
-              ) : (
-                 <></>
-              )}
             </div>
           </Navbar.Collapse>
         </Container>

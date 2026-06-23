@@ -46,6 +46,7 @@ export default function MyNFTs() {
         if (!address) return
 
         setIsLoading(true)
+        console.log('🔍 Ищем NFT для:', address)
 
         try {
             const publicClient = createPublicClient({
@@ -54,9 +55,10 @@ export default function MyNFTs() {
             })
 
             const myTokens = []
+            let notFoundCount = 0
+            const maxNotFound = 10 // Останавливаемся после 10 несуществующих подряд
 
-            // Быстро проверяем первые 20 токенов
-            for (let id = 1; id <= 20; id++) {
+            for (let id = 1; id <= 1000; id++) {
                 try {
                     const owner = await publicClient.readContract({
                         address: CONTRACTS.NFT,
@@ -71,15 +73,34 @@ export default function MyNFTs() {
                         args: [BigInt(id)],
                     })
 
-                    if (owner?.toLowerCase() === address?.toLowerCase()) {
+                    // Проверяем что токен существует и принадлежит нам
+                    if (owner &&
+                        owner !== '0x0000000000000000000000000000000000000000' &&
+                        owner.toLowerCase() === address.toLowerCase()) {
                         myTokens.push(id)
+                        notFoundCount = 0 // Сбрасываем счетчик
+                        console.log(`✅ NFT #${id} - ваш!`)
+                    } else if (owner && owner !== '0x0000000000000000000000000000000000000000') {
+                        // Токен существует, но принадлежит другому
+                        notFoundCount = 0 // Сбрасываем, т.к. токен существует
+                        console.log(`ℹ️ NFT #${id} - владелец: ${owner.slice(0, 6)}...`)
+                    } else {
+                        notFoundCount++
+                    }
+
+                    // Останавливаем если много несуществующих подряд
+                    if (notFoundCount >= maxNotFound) {
+                        console.log(`⏹️ Остановка: ${maxNotFound} несуществующих подряд`)
+                        break
                     }
                 } catch (err) {
-                    // Токен не существует - выходим
-                    if (id > 1) break
+                    notFoundCount++
+                    console.log(`❌ NFT #${id} - ошибка`)
+                    if (notFoundCount >= maxNotFound) break
                 }
             }
 
+            console.log(`📊 Найдено ваших NFT: ${myTokens.length}`, myTokens)
             setMyNFTs(myTokens)
         } catch (err) {
             console.error('Ошибка загрузки:', err)
